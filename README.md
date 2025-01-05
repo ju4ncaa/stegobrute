@@ -2,6 +2,12 @@
 
 Herramienta de fuerza bruta para extraer información oculta en imágenes utilizando Steghide, este script de Bash automatiza el proceso de búsqueda de contraseñas utilizando un diccionario y extrae los datos ocultos de imágenes en formatos JPG o JPEG.
 
+## Descargar stegobrute
+
+```
+git clone https://github.com/ju4ncaa/stegobrute.git
+```
+
 ## Notas
 
 * El script requiere privilegios de superusuario (root) para instalar herramientas o realizar ciertas acciones.
