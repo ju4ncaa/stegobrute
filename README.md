@@ -28,3 +28,5 @@ git clone https://github.com/ju4ncaa/stegobrute.git
 ![imagen](https://github.com/user-attachments/assets/ad0e6d5e-8a88-4463-9c2c-d33b2d9bdd3b)
 
 ![imagen](https://github.com/user-attachments/assets/1ca1cd3b-12cd-4d42-8cb7-905fef7f2be3)
+
+![imagen](https://github.com/user-attachments/assets/2de22b29-8d06-4c2c-b52a-d578fa447967)
