@@ -3,12 +3,12 @@
 # Autor: Juan Carlos Rodríguez (ju4ncaa)
 
 # Paleta de colores ANSI
-GREEN="\e[1;92m"
-RED="\e[1;91m"
-YELLOW="\e[1;93m"
-CYAN="\e[1;96m"
-PURPLE="\e[1;35m"
-RESET="\e[1;97m"
+readonly GREEN="\e[1;92m"
+readonly RED="\e[1;91m"
+readonly YELLOW="\e[1;93m"
+readonly CYAN="\e[1;96m"
+readonly PURPLE="\e[1;35m"
+readonly RESET="\e[1;97m"
 
 # Variables
 FILE=$1
@@ -22,10 +22,11 @@ stty -ctlecho
 trap ctrl_c INT
 function ctrl_c() {
     tput cnorm
-    echo -e  "\n${RED}[!]${RESET} Saliendo...\n"; exit 1
+    echo -e  "\n\n${RED}[!]${RESET} Saliendo..."; exit 1
 }
 
 function banner(){
+  clear
   echo -e "${YELLOW}  ____  _                   ____             _       ${RESET}"
   echo -e "${YELLOW} / ___|| |_ ___  ____  ___ | __ ) _ __ _   _| |_ ___ ${RESET}"
   echo -e "${YELLOW} \___ \| __/ _ \/ _  |/ _ \|  _ \|  __| | | | __/ _ \ ${PURPLE} Autor: @ju4ncaa (Juan Carlos Rodríguez)${RESET}"
@@ -58,16 +59,19 @@ function check_tools() {
 
 function extract_data() {
 	tput civis
-	echo -e  "\n${GREEN}[+]${RESET} Iniciando proceso de fuerza bruta...\n"; sleep 1
+	echo -e  "\n${GREEN}[+]${RESET} Iniciando proceso de fuerza bruta...\n"; sleep 2
+	banner
+	echo -e "\n\n"
 	while IFS= read -r PASS; do
-		steghide extract -sf "$FILE" -xf "$OUTPUT" -p "$PASS" &>/dev/null
+		echo -ne "\e[?25l\r\033[K ${CYAN}[*]${RESET} 💥 Password:${YELLOW}${PASS}${RESET}"
+		timeout 0.1 bash -c "steghide extract -sf '$FILE' -xf '$OUTPUT' -p '$PASS' &>/dev/null"
 		if [ $? -eq 0 ]; then
-            		echo -e "\n${GREEN}[+]${RESET} Contraseña encontrada: ${YELLOW}${PASS}${RESET}\n"
-            		echo -e "${GREEN}[*]${RESET} Información extraída correctamente en: ${YELLOW}${OUTPUT}${RESET}\n"
+            		echo -e "\n\n${GREEN}[+]${RESET} Contraseña encontrada: ${YELLOW}${PASS}${RESET}\n"
+            		echo -e "${YELLOW}[*]${RESET} Información extraída correctamente en: ${YELLOW}${OUTPUT}${RESET}\n"
             		return 0
         	fi
 	done < "$DICT"
-	echo -e "\n${RED}[!]${RESET} No se encontró una contraseña válida en el diccionario.\n"
+	echo -e "\n\n${RED}[!]${RESET} No se encontró una contraseña válida en el diccionario.\n"
     	tput cnorm; exit 1
 }
 
@@ -82,6 +86,9 @@ function validate_ext() {
 
 if [ "$(id -u )" == "0" ]; then
 	banner
+	if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    		help_panel; exit 0
+	fi
 	if [ $# -ne 3 ]; then
 		echo -e  "\n${RED}[!] ERROR:${RESET} Debes de introducir 3 argumentos obligatorios\n"; help_panel; exit 1
 	else
